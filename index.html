@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ইলিশ বাজার</title>
+<style>
+:root{--bg:#0b1220;--card:#131c2e;--tx:#e8eef9;--mu:#8ea0bd;--ac:#38bdf8;--gd:#fbbf24;--rd:#f87171;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+.w{max-width:820px;margin:0 auto;padding:10px}
+.hud{display:flex;gap:8px;margin-bottom:8px}
+.hud div{flex:1;background:var(--card);border-radius:12px;padding:6px 8px;font-size:11px;color:var(--mu)}
+.hud b{display:block;font-size:16px;color:var(--gd)}
+canvas{width:100%;display:block;border-radius:14px;background:#0e1a2e}
+.dlg{margin:8px 0;background:var(--card);border-left:4px solid var(--ac);border-radius:10px;padding:10px 12px;min-height:46px;font-size:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+button{flex:1;min-width:120px;background:#1e2b45;color:var(--tx);border:1px solid #2b3b5c;border-radius:12px;padding:12px;font:inherit;font-size:15px;cursor:pointer}
+button:active{transform:scale(.97)}
+button.p{background:var(--ac);color:#04121f;border:0;font-weight:700}
+button.g{background:var(--gd);color:#241800;border:0;font-weight:700}
+button.on{outline:2px solid var(--ac)}
+input{flex:1;min-width:100px;background:#0b1424;color:var(--tx);border:1px solid #2b3b5c;border-radius:12px;padding:12px;font:inherit;font-size:16px}
+#intro{position:fixed;inset:0;z-index:9;background:radial-gradient(circle at 50% 30%,#12315a,#060d1a 70%);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;overflow:hidden}
+.it{max-width:380px;position:relative}
+.it h1{font-size:46px;margin:6px 0;color:var(--gd);text-shadow:0 0 24px #fbbf2466}
+.it p{color:var(--mu);line-height:1.6}
+.it input{width:100%;margin:10px 0;text-align:center}
+.it button{width:100%;font-size:18px}
+.it small{display:block;margin-top:12px;color:var(--mu)}
+.fishlogo{font-size:84px;animation:sw 3s ease-in-out infinite}
+@keyframes sw{50%{transform:translateX(34px) rotate(8deg)}}
+.bub{position:absolute;bottom:-20px;width:10px;height:10px;border-radius:50%;background:#38bdf833;animation:up 7s linear infinite}
+@keyframes up{to{transform:translateY(-110vh)}}
+#modal{display:none;position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.88);overflow:auto;padding:12px}
+.mc{max-width:420px;margin:0 auto}
+#cimg{width:100%;border-radius:14px;display:block}
+.dev{text-align:center;color:var(--mu);font-size:13px;margin:16px auto 0;max-width:820px;padding:10px}.soc{display:flex;gap:8px;justify-content:center;margin-top:8px}.soc a{color:var(--ac);text-decoration:none;border:1px solid #2b3b5c;border-radius:10px;padding:8px 14px;background:#131c2e}
+</style>
+</head>
+<body>
+<div id="intro"><span class="bub" style="left:10%"></span><span class="bub" style="left:35%;animation-delay:2s"></span><span class="bub" style="left:60%;animation-delay:4s"></span><span class="bub" style="left:85%;animation-delay:1s"></span><div class="it"><div class="fishlogo">🐟</div><h1>ইলিশ বাজার</h1><p>ইলিশের দাম ২৫০০ টাকা! দর কষে লাথি খেয়ে ক্রেডিট জমাও, সেরা ইলিশ কিনে হাসিমুখের ফটোকার্ড শেয়ার করো।</p><input id="pname" placeholder="তোমার নাম লেখো" maxlength="20"><button class="g" id="start">▶ খেলা শুরু</button><small>🔊 সাউন্ড অন করে খেলো</small><div class="dev"><div>👨‍💻 ডেভেলপার: <b style="color:var(--gd)">Naieem Khan Arpon</b></div><div class="soc"><a href="https://www.facebook.com/naieemkhanarpon" target="_blank" rel="noopener noreferrer">📘 Facebook</a><a href="https://www.linkedin.com/in/naieemkhanarpon" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></div></div></div></div>
+<div id="modal"><div class="mc"><canvas id="card" width="720" height="960" style="display:none"></canvas><img id="cimg" alt="card"><div class="row"><button class="p" id="shr">📤 শেয়ার</button><button id="dl">⬇ সেভ</button><button id="cls">✖ বন্ধ</button></div><p style="color:var(--mu);font-size:13px;text-align:center">শেয়ার না হলে ছবিতে চেপে ধরে সেভ করে নাও।</p></div></div>
+<div class="w">
+  <div class="hud">
+    <div>ক্রেডিট<b id="cr">২০০০ ৳</b></div>
+    <div>ইলিশ<b id="fs">০ কেজি</b></div>
+    <div>লাথি<b id="kk">০</b></div>
+    <div>লেভেল<b id="lv">১</b></div>
+    <div>স্কোর<b id="sc">০</b></div>
+  </div>
+  <div id="goal" style="font-size:13px;color:var(--mu);margin:0 0 6px"></div>
+  <canvas id="c" width="800" height="420"></canvas>
+  <div class="dlg" id="dlg">দোকান বেছে নাও, তারপর ইলিশের দাম জিজ্ঞেস করো।</div>
+  <div class="row" id="shops"></div>
+  <div class="row">
+    <button class="p" id="ask">🐟 দাম জিজ্ঞেস করো</button>
+    <button id="qm" style="flex:0 0 48px;min-width:48px">−</button><button class="g" id="buy">কিনে নাও (১ কেজি)</button><button id="qp" style="flex:0 0 48px;min-width:48px">+</button><button id="snd" style="flex:0 0 48px;min-width:48px">🔊</button>
+  </div>
+  <div class="row">
+    <input id="off" type="number" value="2000" inputmode="numeric" placeholder="তোমার দাম">
+    <button id="bar">দর কষো</button>
+  </div>
+</div>
+<div class="dev"><div>👨‍💻 ডেভেলপার: <b style="color:var(--gd)">Naieem Khan Arpon</b></div><div class="soc"><a href="https://www.facebook.com/naieemkhanarpon" target="_blank" rel="noopener noreferrer">📘 Facebook</a><a href="https://www.linkedin.com/in/naieemkhanarpon" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></div></div>
+<script>
+const $=id=>document.getElementById(id),cv=$('c');let g=cv.getContext('2d');
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const KICK=500;let dealKicks=0,pname='খেলোয়াড়',started=false,dust=[];
+let prices=[2500,2800,2200],level=1,goal=2,lvFish=0,score=0,qty=1,muted=false,banner=0;
+let AC;function au(){if(!AC)try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d,type,v,sl){if(muted)return;const a=au();if(!a)return;const o=a.createOscillator(),gn=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,a.currentTime);if(sl)o.frequency.exponentialRampToValueAtTime(sl,a.currentTime+d);gn.gain.setValueAtTime(v||.15,a.currentTime);gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(gn);gn.connect(a.destination);o.start();o.stop(a.currentTime+d)}
+function noise(d,v){if(muted)return;const a=au();if(!a)return;const b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*(1-i/x.length);const s=a.createBufferSource(),gn=a.createGain();gn.gain.value=v||.3;s.buffer=b;s.connect(gn);gn.connect(a.destination);s.start()}
+const sfx={kick(){tone(180,.25,'square',.2,50);noise(.2,.4)},coin(){tone(880,.1,'square',.1);setTimeout(()=>tone(1320,.18,'square',.1),90)},talk(){for(let i=0;i<4;i++)setTimeout(()=>tone(200+Math.random()*120,.07,'triangle',.08),i*80)},lvl(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.2,'triangle',.15),i*120))},no(){tone(150,.25,'sawtooth',.12,90)}};
+let credit=2000,fish=0,kicks=0,sel=0,busy=false,T=0;
+const names=['করিম মিয়া','রহিম চাচা','জব্বার ভাই'];
+const sx=[190,410,630];
+const quotes=[p=>'ইলিশ খাঁটি পদ্মার! '+bn(p)+' টাকা কেজি, এক পয়সা কম না।',p=>'আরে ভাই, টাটকা বড় ইলিশ! '+bn(p)+' টাকা কেজি।',p=>'চকচকে রুপালি ইলিশ, '+bn(p)+' টাকা। নেবেন তো নেন!'];
+// state for animation
+let px=sx[0]-120,ptx=px,py=0,pr=0,kickT=-1,shake=0,floats=[],coins=[],say='',sayT=0,talk=-1;
+shopsUI();
+function shopsUI(){const r=$('shops');r.innerHTML='';names.forEach((n,i)=>{const b=document.createElement('button');b.textContent='🏪 '+n+' · '+bn(prices[i])+'৳';b.className=i==sel?'on':'';b.onclick=()=>{if(busy)return;sel=i;ptx=sx[i]-120;shopsUI();dlg('তুমি '+n+'-র দোকানের সামনে গেলে।')};r.appendChild(b)})}
+function dlg(t){$('dlg').textContent=t}
+function hud(){$('cr').textContent=bn(credit)+' ৳';$('fs').textContent=bn(fish)+' কেজি';$('kk').textContent=bn(kicks);$('lv').textContent=bn(level);$('sc').textContent=bn(score);$('goal').textContent=['🌙 রাতের বাজার','🌅 ভোরের নদীঘাট','🌧 বৃষ্টির বাজার'][(level-1)%3]+' · 🎯 লেভেল '+bn(level)+' লক্ষ্য: '+bn(goal)+' কেজি ইলিশ কেনো ('+bn(lvFish)+'/'+bn(goal)+')';$('buy').textContent='কিনে নাও ('+bn(qty)+' কেজি)'}
+function checkLevel(){if(lvFish>=goal){level++;lvFish-=goal;goal+=2;credit+=1000;prices=prices.map(p=>p+200);score+=500;sfx.lvl();banner=3;shopsUI();hud();dlg('🎉 লেভেল '+bn(level)+'! বোনাস +১০০০ ৳, কিন্তু সব ইলিশের দাম ২০০ ৳ বেড়ে গেছে!')}}
+$('ask').onclick=()=>{if(busy)return;dlg(names[sel]+': '+quotes[sel](prices[sel]));say=bn(prices[sel])+' ৳/কেজি';sayT=2.2;talk=2;sfx.talk()}
+$('bar').onclick=()=>{
+  if(busy)return;const o=+$('off').value||0;
+  if(o<prices[sel]){kick(o)}else{dlg(names[sel]+': ঠিক আছে ভাই, '+bn(o)+' টাকায় দিচ্ছি।');buy()}
+};
+$('buy').onclick=()=>{if(!busy)buy()};
+function buy(){
+  const cost=prices[sel]*qty;if(credit<cost){sfx.no();dlg('ক্রেডিট কম! '+bn(cost)+' ৳ লাগবে, আছে '+bn(credit)+'। কম দাম বলে দেখো কী হয় 😏');return}
+  credit-=cost;fish+=qty;lvFish+=qty;score+=qty*100;hud();sfx.coin();dlg(names[sel]+': নিন ভাই, '+bn(qty)+' কেজি সেরা ইলিশ! 🎉');say='ধন্যবাদ!';sayT=1.8;talk=1.8;checkLevel();{const dk=dealKicks,cs=cost,q=qty;dealKicks=0;setTimeout(()=>showCard(cs,q,dk),1400)}
+  for(let i=0;i<10+qty*4;i++)coins.push({x:px+20,y:290,vx:(Math.random()-.2)*3,vy:-3-Math.random()*4,l:1.2});
+}
+function kick(o){
+  busy=true;kickT=0;kicks++;score+=25;dlg(names[sel]+': '+bn(o)+' টাকা?! এই দামে ইলিশ?! যা ভাগ! 🦶');
+  say='কী?! যা ভাগ!';sayT=1.5;
+}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+function step(dt){
+  T+=dt;banner-=dt;sayT-=dt;dust.forEach(d=>{d.l-=dt;d.x+=d.vx;d.y+=d.vy;d.vy+=.15});dust=dust.filter(d=>d.l>0);talk-=dt;shake*=.9;
+  if(kickT>=0){
+    kickT+=dt/1.6;
+    if(kickT>.3&&kickT-dt/1.6<=.3){shake=14;sfx.kick();dealKicks++;for(let i=0;i<16;i++)dust.push({x:px-50,y:302,vx:(Math.random()-.8)*4,vy:-Math.random()*3,l:.8});credit+=KICK;hud();floats.push({t:'+'+bn(KICK)+' ৳',x:px,y:250,l:1.6});dlg('লাথি খেয়ে +'+bn(KICK)+' ৳ ক্রেডিট! এখন ক্রেডিট '+bn(credit)+' ৳।'+(credit>=prices[sel]*qty?' এবার ইলিশ কিনতে পারবে!':''))}
+    if(kickT>=1){kickT=-1;busy=false;py=0;pr=0;}
+  }
+  if(kickT<0){px+=(ptx-px)*Math.min(1,dt*5)}
+  floats.forEach(f=>{f.l-=dt;f.y-=dt*40});floats=floats.filter(f=>f.l>0);
+  coins.forEach(c=>{c.l-=dt;c.x+=c.vx;c.y+=c.vy;c.vy+=.35});coins=coins.filter(c=>c.l>0);
+}
+function rr(x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}
+function drawFish(x,y,s,ph){
+  g.save();g.translate(x,y);g.scale(s,s);g.rotate(Math.sin(T*2+ph)*.04);
+  const tail=Math.sin(T*5+ph)*6;
+  g.fillStyle='#8aa4b8';g.beginPath();g.moveTo(-46,0);g.lineTo(-72,-16+tail);g.lineTo(-66,0);g.lineTo(-72,16+tail);g.closePath();g.fill();
+  const gr=g.createLinearGradient(0,-16,0,16);gr.addColorStop(0,'#6b8aa3');gr.addColorStop(.35,'#dbe7f0');gr.addColorStop(.7,'#f4f8fb');gr.addColorStop(1,'#b8c8d6');
+  g.fillStyle=gr;g.beginPath();g.ellipse(0,0,50,17,0,0,7);g.fill();
+  g.fillStyle='rgba(255,255,255,.35)';g.beginPath();g.ellipse(-4+Math.sin(T*2+ph)*6,-6,22,3,0,0,7);g.fill();
+  g.strokeStyle='rgba(60,90,120,.4)';g.lineWidth=1;g.beginPath();g.arc(30,0,14,-1.2,1.2);g.stroke();
+  g.strokeStyle='rgba(90,120,150,.25)';g.lineWidth=1;for(let k=-3;k<3;k++)for(let m=-1;m<2;m++){g.beginPath();g.arc(k*9,m*8,6,.3,2.8);g.stroke()}g.globalAlpha=Math.max(0,Math.sin(T*3+ph*5))*.9;g.fillStyle='#fff';g.fillRect(-10+Math.sin(T+ph)*20,-8,3,3);g.globalAlpha=1;g.fillStyle='#0b1220';g.beginPath();g.arc(38,-3,3,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(39,-4,1,0,7);g.fill();
+  g.fillStyle='#6b8aa3';g.beginPath();g.moveTo(-4,-16);g.lineTo(6,-24);g.lineTo(12,-15);g.fill();
+  g.restore();
+}
+function drawStall(i){
+  const x=sx[i];
+  g.fillStyle=['#b91c1c','#1d4ed8','#15803d'][i];
+  for(let k=0;k<6;k++){g.fillStyle=k%2?'#e5e7eb':['#b91c1c','#1d4ed8','#15803d'][i];g.beginPath();g.moveTo(x-90+k*30,60);g.lineTo(x-90+k*30+30,60);g.lineTo(x-90+k*30+36,100);g.lineTo(x-90+k*30+6,100);g.fill()}
+  g.fillStyle='#4b3621';g.fillRect(x-86,100,6,190);g.fillRect(x+80,100,6,190);
+  // shopkeeper
+  const kk=sel===i&&kickT>=0&&kickT<.5;
+  const bob=talk>0&&sel===i?Math.sin(T*14)*2:Math.sin(T*1.5+i)*1;
+  g.save();g.translate(x,0);
+  g.fillStyle='#e8c39e';g.beginPath();g.arc(0,150+bob,20,0,7);g.fill();
+  g.fillStyle='#222';g.beginPath();g.arc(0,143+bob,20,3.3,6.1);g.fill();
+  g.fillStyle='#111';if((T*.7+i)%3.2<.12){g.fillRect(-10,151+bob,6,1.5);g.fillRect(4,151+bob,6,1.5)}else{g.beginPath();g.arc(-7,151+bob,2.4,0,7);g.fill();g.beginPath();g.arc(7,151+bob,2.4,0,7);g.fill()}
+  g.strokeStyle='#111';g.lineWidth=2;g.beginPath();
+  if(sel===i&&kickT>=0)g.arc(0,164+bob,6,3.4,6);else g.arc(0,160+bob,6,.2,2.9);g.stroke();
+  g.fillStyle=['#f5f5f5','#fde68a','#bfdbfe'][i];rr(-22,172+bob,44,70,12);
+  // arms
+  g.strokeStyle='#e8c39e';g.lineWidth=9;g.lineCap='round';
+  g.beginPath();g.moveTo(-20,182);g.lineTo(-44,225+(talk>0&&sel===i?Math.sin(T*10)*10:0));g.stroke();
+  g.beginPath();g.moveTo(20,182);g.lineTo(44,225);g.stroke();
+  // kick leg
+  if(sel===i){const a=kickT<0?0:Math.sin(Math.min(kickT/.3,1)*Math.PI/1)*1.0*(kickT<.5?1:0);
+    g.save();g.translate(-10,240);g.rotate(a*1.4);g.strokeStyle='#e8c39e';g.lineWidth=11;g.beginPath();g.moveTo(0,0);g.lineTo(-10,50);g.stroke();g.fillStyle='#333';g.beginPath();g.ellipse(-16,54,12,6,0,0,7);g.fill();g.restore()}
+  g.restore();
+  // counter
+  g.fillStyle='#6b4a2b';g.fillRect(x-95,236,190,14);g.fillStyle='#3b2916';g.fillRect(x-95,250,190,50);
+  g.fillStyle='#cfe3f3';rr(x-80,222,160,16,6);
+  for(let k=0;k<3;k++)drawFish(x-40+k*40,226-k%2*3,.38,i*2+k);
+  g.fillStyle='#fff';g.font='bold 14px sans-serif';g.textAlign='center';g.fillText('ইলিশ '+bn(prices[i])+'৳',x,282);
+  if(sel===i){g.strokeStyle='#38bdf8';g.lineWidth=2;g.setLineDash([6,5]);g.strokeRect(x-98,52,196,252);g.setLineDash([])}
+}
+function drawPlayer(){
+  let x=px,y=300,r=0;
+  if(kickT>=0){
+    const t=kickT;
+    if(t>.3&&t<.85){const u=(t-.3)/.55;x=px-ease(u)*120;y=300-Math.sin(u*Math.PI)*90;r=-ease(u)*3.6}
+    else if(t>=.85){const u=(t-.85)/.15;x=px-120*(1-ease(u));y=300;r=0}
+    if(x<30)x=30;
+  }
+  g.fillStyle='rgba(0,0,0,.35)';g.beginPath();g.ellipse(x,303,Math.max(8,24-(300-y)/5),6,0,0,7);g.fill();g.save();g.translate(x,y);g.rotate(r);
+  const w=kickT<0&&Math.abs(ptx-px)>3?Math.sin(T*16)*6:0;
+  g.fillStyle='#e8c39e';g.beginPath();g.arc(0,-92,16,0,7);g.fill();
+  g.fillStyle='#fff';g.beginPath();g.arc(0,-100,17,3.3,6.1);g.fill();
+  g.fillStyle='#38bdf8';rr(-17,-74,34,52,10);
+  g.strokeStyle='#1e3a5f';g.lineWidth=9;g.lineCap='round';g.beginPath();g.moveTo(-8,-24);g.lineTo(-8+w,2);g.moveTo(8,-24);g.lineTo(8-w,2);g.stroke();
+  g.strokeStyle='#e8c39e';g.lineWidth=7;g.beginPath();g.moveTo(-15,-66);g.lineTo(-24,-36);g.moveTo(15,-66);g.lineTo(24,-36);g.stroke();
+  if(kickT>.3&&kickT<.6){g.fillStyle='#111';g.font='18px sans-serif';g.textAlign='center';g.fillText('x  x',0,-88)}
+  else{g.fillStyle='#111';g.beginPath();g.arc(-5,-93,2,0,7);g.arc(5,-93,2,0,7);g.fill()}
+  g.restore();
+}
+function drawBG(){const s=(level-1)%3,C=[['#0a1426','#1b2a44'],['#6d2f3a','#f6a85c'],['#27303d','#556070']][s];
+const sky=g.createLinearGradient(0,0,0,300);sky.addColorStop(0,C[0]);sky.addColorStop(1,C[1]);g.fillStyle=sky;g.fillRect(-20,-20,840,460);
+if(s==0){g.fillStyle='#f1f5f9';g.beginPath();g.arc(700,40,16,0,7);g.fill();for(let i=0;i<30;i++){g.globalAlpha=.4+.4*Math.sin(T*2+i);g.fillRect((i*97)%800,(i*53)%60,2,2)}g.globalAlpha=1}
+if(s==1){g.fillStyle='#fde68a';g.beginPath();g.arc(120,230+Math.sin(T*.3)*3,46,0,7);g.fill();g.fillStyle='#1e3a5f';g.fillRect(-20,255,840,45);for(let i=0;i<2;i++){const bx=((T*18+i*400)%900)-60;g.fillStyle='#3b2a1a';g.beginPath();g.moveTo(bx,262);g.lineTo(bx+90,262);g.lineTo(bx+75,278);g.lineTo(bx+15,278);g.fill();g.fillRect(bx+44,230,3,32)}}
+if(s==2){g.strokeStyle='rgba(180,200,230,.5)';g.lineWidth=1;g.beginPath();for(let i=0;i<70;i++){const rx=(i*131+T*60)%840,ry=(i*71+T*420)%420;g.moveTo(rx,ry);g.lineTo(rx-4,ry+14)}g.stroke()}
+for(let i=0;i<4;i++){const wx=((T*(14+i*5)+i*230)%900)-50,wy=292;g.fillStyle='rgba(8,12,22,.55)';g.beginPath();g.arc(wx,wy-52,8,0,7);g.fill();g.fillRect(wx-8,wy-44,16,34);g.fillRect(wx-7,wy-10,5,10+Math.sin(T*8+i)*3);g.fillRect(wx+2,wy-10,5,10-Math.sin(T*8+i)*3)}}
+function draw(){
+  g.save();
+  if(shake>.5)g.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+  drawBG();
+  g.fillStyle='#fde68a';
+  for(let i=0;i<10;i++){const x=40+i*82;g.globalAlpha=.55+.25*Math.sin(T*3+i);g.beginPath();g.arc(x,28,4,0,7);g.fill();g.globalAlpha=.07;g.beginPath();g.arc(x,28,26,0,7);g.fill();g.globalAlpha=1}
+  g.fillStyle='#16202f';g.fillRect(-20,300,840,140);
+  g.fillStyle='rgba(56,189,248,.08)';for(let i=0;i<8;i++)g.fillRect(((i*120+T*10)%840)-20,330+i%3*25,60,2);
+  for(let i=0;i<3;i++)drawStall(i);
+  drawPlayer();
+  dust.forEach(d=>{g.globalAlpha=Math.max(0,d.l);g.fillStyle='#9aa7b8';g.beginPath();g.arc(d.x,d.y,4+(.8-d.l)*8,0,7);g.fill();g.globalAlpha=1});coins.forEach(c=>{g.fillStyle='#fbbf24';g.beginPath();g.arc(c.x,c.y,5,0,7);g.fill()});
+  g.textAlign='center';
+  floats.forEach(f=>{g.globalAlpha=Math.min(1,f.l);g.fillStyle='#fbbf24';g.font='bold 26px sans-serif';g.fillText(f.t,f.x,f.y);g.globalAlpha=1});
+  if(kickT>.28&&kickT<.5){g.fillStyle='#f87171';g.font='bold 40px sans-serif';g.save();g.translate(sx[sel]-70,200);g.rotate(-.2);g.fillText('ধপাস!',0,0);g.restore()}
+  if(banner>0){g.globalAlpha=Math.min(1,banner);g.fillStyle='#fbbf24';g.font='bold 44px sans-serif';g.fillText('লেভেল '+bn(level)+'!',400,210);g.globalAlpha=1}
+  if(sayT>0){const x=sx[sel],w=150;g.fillStyle='#fff';rr(x-w/2,10+5,w,32,10);g.beginPath();g.moveTo(x-8,47);g.lineTo(x+4,47);g.lineTo(x-2,60);g.fill();g.fillStyle='#111';g.font='bold 15px sans-serif';g.fillText(say,x,36)}
+  g.restore();
+}
+$('qm').onclick=()=>{qty=Math.max(1,qty-1);hud()};$('qp').onclick=()=>{qty=Math.min(10,qty+1);hud()};$('snd').onclick=()=>{muted=!muted;$('snd').textContent=muted?'🔇':'🔊'};
+hud();shopsUI();
+['pointerdown','keydown'].forEach(e=>addEventListener(e,()=>au(),{passive:true}));
+function bg(){if(muted||!started)return;const a=au();if(!a)return;const n=Math.floor(a.sampleRate*.9),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/n);const s=a.createBufferSource(),f=a.createBiquadFilter(),gn=a.createGain();f.type='lowpass';f.frequency.value=(level-1)%3==2?1600:550;gn.gain.value=.06;s.buffer=b;s.connect(f);f.connect(gn);gn.connect(a.destination);s.start()}
+$('start').onclick=()=>{pname=$('pname').value.trim()||'খেলোয়াড়';started=true;$('intro').style.display='none';au();sfx.lvl();setInterval(bg,850);dlg('স্বাগতম '+pname+'! দোকান বেছে ইলিশের দাম জিজ্ঞেস করো।')};
+function showCard(cost,q,dk){const c=$('card'),x=c.getContext('2d');
+const gr=x.createLinearGradient(0,0,0,960);gr.addColorStop(0,'#0f2a4a');gr.addColorStop(1,'#071020');x.fillStyle=gr;x.fillRect(0,0,720,960);
+x.save();x.translate(360,360);for(let i=0;i<16;i++){x.rotate(Math.PI/8);x.fillStyle='rgba(251,191,36,.07)';x.beginPath();x.moveTo(0,0);x.lineTo(760,-60);x.lineTo(760,60);x.fill()}x.restore();
+for(let i=0;i<50;i++){x.fillStyle=['#fbbf24','#38bdf8','#f87171','#4ade80'][i%4];x.save();x.translate(Math.random()*720,Math.random()*900);x.rotate(Math.random()*6);x.fillRect(0,0,10,18);x.restore()}
+x.textAlign='center';x.fillStyle='#fbbf24';x.font='bold 52px sans-serif';x.fillText('🏆 ইলিশ বিজয়ী!',360,90);
+x.fillStyle='#e8c39e';x.beginPath();x.arc(360,330,140,0,7);x.fill();
+x.fillStyle='#fff';x.beginPath();x.arc(360,285,146,3.3,6.1);x.fill();
+x.strokeStyle='#222';x.lineWidth=10;x.lineCap='round';x.beginPath();x.arc(312,325,22,3.5,5.9);x.stroke();x.beginPath();x.arc(408,325,22,3.5,5.9);x.stroke();
+x.fillStyle='#7f1d1d';x.beginPath();x.arc(360,360,70,.1,Math.PI-.1);x.closePath();x.fill();x.fillStyle='#fff';x.beginPath();x.arc(360,360,70,.25,Math.PI-.25);x.lineTo(360,372);x.fill();
+x.fillStyle='rgba(248,113,113,.45)';x.beginPath();x.arc(262,368,20,0,7);x.arc(458,368,20,0,7);x.fill();
+const sv=g;g=x;drawFish(360,610,3.4,1);g=sv;
+x.fillStyle='#fbbf24';x.font='bold 58px sans-serif';x.fillText(pname,360,740);
+x.fillStyle='#fff';x.font='bold 40px sans-serif';x.fillText(dk>0?bn(dk)+' লাথি খেয়ে':'দর না কষেই',360,800);
+x.fillText(bn(cost)+' টাকায় '+bn(q)+' কেজি ইলিশ কিনলো! 😄',360,855);
+x.fillStyle='#8ea0bd';x.font='28px sans-serif';x.fillText('স্কোর '+bn(score)+' · লেভেল '+bn(level)+' · ইলিশ বাজার 🐟',360,897);x.fillStyle='#38bdf8';x.font='bold 24px sans-serif';x.fillText('Developer: Naieem Khan Arpon',360,936);
+$('cimg').src=c.toDataURL('image/png');$('modal').style.display='block';sfx.lvl()}
+$('cls').onclick=()=>{$('modal').style.display='none'};
+$('dl').onclick=()=>{const a=document.createElement('a');a.href=$('cimg').src;a.download='ilish-card.png';a.click()};
+$('shr').onclick=async()=>{try{const b=await new Promise(r=>$('card').toBlob(r,'image/png'));const f=new File([b],'ilish-card.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'ইলিশ বাজার',text:pname+' ইলিশ কিনেছে!'})}else if(navigator.share){await navigator.share({title:'ইলিশ বাজার',text:pname+' ইলিশ বাজার গেমে ইলিশ কিনেছে! 🐟',url:location.href})}else{$('dl').click()}}catch(e){}};
+let last=performance.now();
+(function loop(n){const dt=Math.min(.05,(n-last)/1000);last=n;step(dt);draw();requestAnimationFrame(loop)})(last);
+cv.addEventListener('click',e=>{if(busy)return;const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*800/r.width;let b=0;sx.forEach((s,i)=>{if(Math.abs(x-s)<Math.abs(x-sx[b]))b=i});sel=b;ptx=sx[b]-120;shopsUI();dlg('তুমি '+names[b]+'-র দোকানের সামনে গেলে।')});
+</script>
+</body>
+</html>
